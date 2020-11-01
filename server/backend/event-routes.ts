@@ -144,7 +144,35 @@ router.get("/by-days/:offset", (req: Request, res: Response) => {
 });
 
 router.get("/by-hours/:offset", (req: Request, res: Response) => {
-  res.send("/by-hours/:offset");
+  const offset: number = +req.params.offset;
+  const events: Event[] = getAllEvents();
+  let dateToCheck = new Date().valueOf() - convertDaysToMili(offset);
+  let filteredEvents = events.filter(
+    (event) => convertDateToString(event.date) === convertDateToString(dateToCheck)
+  );
+  filteredEvents = filteredEvents.map((event) => {
+    return { ...event, date: new Date(event.date).getHours() };
+  });
+  let hoursArr = [];
+  for (let i = 0; i < 24; i++) {
+    if (i < 10) {
+      hoursArr.push({ hour: `0${i}:00`, count: 0 });
+    } else {
+      hoursArr.push({ hour: `${i}:00`, count: 0 });
+    }
+  }
+  let newArr: any[] = [];
+  for (const eventToCheck of filteredEvents) {
+    const checker = newArr.findIndex(
+      (event) => eventToCheck.session_id === event.session_id && eventToCheck.date === event.date
+    );
+    if (checker === -1) {
+      hoursArr[eventToCheck.date].count++;
+    } else {
+      newArr.push(eventToCheck);
+    }
+  }
+  res.json(hoursArr);
 });
 
 router.get("/today", (req: Request, res: Response) => {
