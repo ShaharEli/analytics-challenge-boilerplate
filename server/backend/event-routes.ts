@@ -14,6 +14,7 @@ import {
   userFieldsValidator,
   isUserValidator,
 } from "./validators";
+import { count } from "console";
 const router = express.Router();
 
 type eventName = "login" | "signup" | "admin" | "/";
@@ -42,6 +43,15 @@ router.get("/all", (req: Request, res: Response) => {
   const events: Event[] = getAllEvents();
   res.json(events);
 });
+
+function convertDateToString(date: number) {
+  let today = new Date(date);
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const yyyy = today.getFullYear();
+  const generatedDate = `${yyyy}/${mm}/${dd}`;
+  return `${generatedDate}`;
+}
 
 router.get("/all-filtered", (req: Request, res: Response) => {
   const filters: Filter = req.query;
@@ -81,8 +91,56 @@ router.get("/all-filtered", (req: Request, res: Response) => {
   });
 });
 
+const convertDaysToMili = (days: number) => days * 24 * 60 * 60 * 1000;
+interface FilteredBySession {
+  date: string;
+  count: number;
+  session_id: string;
+}
+
+type FilteredByDate = Omit<FilteredBySession, "date"> & { date: string };
+
 router.get("/by-days/:offset", (req: Request, res: Response) => {
-  res.send("/by-days/:offset");
+  const offset: number = +req.params.offset;
+  const events: Event[] = getAllEvents();
+  let startingDate: number = new Date().valueOf() - convertDaysToMili(offset - 1);
+  const day: number = new Date(startingDate).getDate();
+  const month: number = new Date(startingDate).getMonth() + 1;
+  const year: number = new Date(startingDate).getFullYear();
+  startingDate = new Date(`${year}/${month}/${day}`).valueOf();
+  const endDate = startingDate - convertDaysToMili(7);
+  let filtered = events.filter((event) => event.date < startingDate && event.date >= endDate);
+  filtered.sort((firstEvent: Event, secondEvent: Event) => firstEvent.date - secondEvent.date);
+  const filteredAndDateFixed: Omit<FilteredBySession, "count">[] = filtered.map((event) => {
+    return { session_id: event.session_id, date: convertDateToString(event.date) };
+  });
+  let filteredAndGrouped: FilteredByDate[] = [];
+  for (const eventToCheck of filteredAndDateFixed) {
+    const indexChecker = filteredAndGrouped.findIndex(
+      (event: FilteredByDate) => event.date === eventToCheck.date
+    );
+    if (indexChecker === -1) {
+      filteredAndGrouped.push({ ...eventToCheck, count: 1 });
+    } else {
+      filteredAndGrouped[indexChecker].count++;
+    }
+  }
+  let filteredAndGroupedBySessionId: FilteredBySession[] = [];
+  for (const eventToCheck of filteredAndGrouped) {
+    const indexChecker = filteredAndGroupedBySessionId.findIndex(
+      (event: FilteredBySession) => event.session_id === eventToCheck.session_id
+    );
+
+    if (indexChecker === -1) {
+      filteredAndGroupedBySessionId.push(eventToCheck);
+    }
+  }
+
+  res.json(
+    filteredAndGrouped.map((event: FilteredBySession) => {
+      return { date: event.date, count: event.count };
+    })
+  );
 });
 
 router.get("/by-hours/:offset", (req: Request, res: Response) => {
