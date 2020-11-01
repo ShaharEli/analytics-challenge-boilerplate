@@ -99,6 +99,10 @@ const db = low(adapter);
 
 export const getAllEvents = () => db.get(EVENT_TABLE).value();
 
+export const createEvent = (event: Event) => {
+  db.get(EVENT_TABLE).push(event).write();
+};
+
 export const seedDatabase = () => {
   const testSeed = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), "data", "database-seed.json"), "utf-8")

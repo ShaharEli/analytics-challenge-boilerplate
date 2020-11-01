@@ -4,7 +4,7 @@ import express from "express";
 import { Request, Response } from "express";
 
 // some useful database functions in here:
-import { getAllEvents } from "./database";
+import { getAllEvents, createEvent } from "./database";
 import { Event, weeklyRetentionObject } from "../../client/src/models/event";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 
@@ -161,7 +161,7 @@ router.get("/by-hours/:offset", (req: Request, res: Response) => {
       hoursArr.push({ hour: `${i}:00`, count: 0 });
     }
   }
-  let newArr: any[] = [];
+  let newArr: Event[] = [];
   for (const eventToCheck of filteredEvents) {
     const checker = newArr.findIndex(
       (event) => eventToCheck.session_id === event.session_id && eventToCheck.date === event.date
@@ -192,7 +192,13 @@ router.get("/:eventId", (req: Request, res: Response) => {
 });
 
 router.post("/", (req: Request, res: Response) => {
-  res.send("/");
+  const event: Event = req.body;
+  try {
+    createEvent(event);
+    res.send("added");
+  } catch (e) {
+    res.send("not added");
+  }
 });
 
 router.get("/chart/os/:time", (req: Request, res: Response) => {
