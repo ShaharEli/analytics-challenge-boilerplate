@@ -49,7 +49,7 @@ import {
   NotificationResponseItem,
   TransactionQueryPayload,
   DefaultPrivacyLevel,
-  Event
+  Event,
 } from "../../client/src/models";
 import Fuse from "fuse.js";
 import {
@@ -69,7 +69,6 @@ import {
   isCommentNotification,
 } from "../../client/src/utils/transactionUtils";
 import { DbSchema } from "../../client/src/models/db-schema";
-
 
 export type TDatabase = {
   users: User[];
@@ -97,6 +96,8 @@ const databaseFile = path.join(__dirname, "../data/database.json");
 const adapter = new FileSync<DbSchema>(databaseFile);
 
 const db = low(adapter);
+
+export const getAllEvents = () => db.get(EVENT_TABLE).value();
 
 export const seedDatabase = () => {
   const testSeed = JSON.parse(
@@ -862,6 +863,5 @@ export const getTransactionsBy = (key: string, value: string) =>
 
 /* istanbul ignore next */
 export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
-
 
 export default db;
