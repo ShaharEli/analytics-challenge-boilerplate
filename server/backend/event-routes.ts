@@ -197,16 +197,16 @@ const toStartOfTheDay = (date: number): number => {
 };
 
 router.get("/retention", (req: Request, res: Response) => {
-  const dayZero = +req.query.dayZero;
+  const dayZero: number = +req.query.dayZero;
   const events: Event[] = getAllEvents();
-  let startingDateInNumber = toStartOfTheDay(dayZero);
-  const getStringDates = (startingDateInNumber: number) => {
+  let startingDateInNumber: number = toStartOfTheDay(dayZero);
+  const getStringDates = (startingDateInNumber: number): string[] => {
     return [
       convertDateToString(startingDateInNumber),
       convertDateToString(startingDateInNumber + convertDaysToMili(7)),
     ];
   };
-  const getSingedUsers = (startingDateInNumber: number) => {
+  const getSingedUsers = (startingDateInNumber: number): string[] => {
     return events
       .filter(
         (event) =>
@@ -214,10 +214,14 @@ router.get("/retention", (req: Request, res: Response) => {
           event.date > startingDateInNumber &&
           event.name === "signup"
       )
-      .map((user) => user.distinct_user_id);
+      .map((user: Event): string => user.distinct_user_id);
   };
-  const getOneWeekRetentions = (startDate: number, users: string[], weekNumber: number) => {
-    let weeklyRetentionObject = {
+  const getOneWeekRetentions = (
+    startDate: number,
+    users: string[],
+    weekNumber: number
+  ): weeklyRetentionObject => {
+    let weeklyRetentionObject: Omit<weeklyRetentionObject, "weeklyRetention"> = {
       registrationWeek: weekNumber,
       start: getStringDates(startDate)[0],
       end: getStringDates(startDate)[1],
@@ -225,22 +229,22 @@ router.get("/retention", (req: Request, res: Response) => {
     };
 
     const weeklyRetention = [100];
-    let currentDateCheck = startDate + convertDaysToMili(7);
+    let currentDateCheck: number = startDate + convertDaysToMili(7);
     while (true) {
       if (currentDateCheck > toStartOfTheDay(new Date().valueOf()) + convertDaysToMili(1)) {
         break;
       }
       let countUserRetention = 0;
-      const usersEvents = events
+      const usersEvents: string[] = events
         .filter(
           (event) =>
             currentDateCheck + convertDaysToMili(7) > event.date &&
             event.date >= currentDateCheck &&
             event.name === "login"
         )
-        .map((user) => user.distinct_user_id);
+        .map((user: Event): string => user.distinct_user_id);
 
-      const setUsersArr = Array.from(new Set(usersEvents));
+      const setUsersArr: string[] = Array.from(new Set(usersEvents));
       for (let user of setUsersArr) {
         if (users.findIndex((userToCheck) => userToCheck === user) !== -1) {
           countUserRetention++;
