@@ -183,22 +183,90 @@ router.get("/week", (req: Request, res: Response) => {
   res.send("/week");
 });
 
-router.get("/retention", (req: Request, res: Response) => {
-  const { dayZero } = req.query;
-  res.send("/retention");
-});
-router.get("/:eventId", (req: Request, res: Response) => {
-  res.send("/:eventId");
-});
-
 router.post("/", (req: Request, res: Response) => {
   const event: Event = req.body;
   try {
     createEvent(event);
-    res.send("added");
-  } catch (e) {
-    res.send("not added");
+    res.send("event added");
+  } catch (err) {
+    res.send("event not added");
   }
+});
+const toStartOfTheDay = (date: number): number => {
+  return new Date(new Date(date).toDateString()).valueOf();
+};
+
+router.get("/retention", (req: Request, res: Response) => {
+  const dayZero = +req.query.dayZero;
+  const events: Event[] = getAllEvents();
+  let startingDateInNumber = toStartOfTheDay(dayZero);
+  const getStringDates = (startingDateInNumber: number) => {
+    return [
+      convertDateToString(startingDateInNumber),
+      convertDateToString(startingDateInNumber + convertDaysToMili(7)),
+    ];
+  };
+  const getSingedUsers = (startingDateInNumber: number) => {
+    return events
+      .filter(
+        (event) =>
+          startingDateInNumber + convertDaysToMili(7) > event.date &&
+          event.date > startingDateInNumber &&
+          event.name === "signup"
+      )
+      .map((user) => user.distinct_user_id);
+  };
+  const getOneWeekRetentions = (startDate: number, users: string[], weekNumber: number) => {
+    let weeklyRetentionObject = {
+      registrationWeek: weekNumber,
+      start: getStringDates(startDate)[0],
+      end: getStringDates(startDate)[1],
+      newUsers: getSingedUsers(startDate).length,
+    };
+
+    const weeklyRetention = [100];
+    let currentDateCheck = startDate + convertDaysToMili(7);
+    while (true) {
+      if (currentDateCheck > toStartOfTheDay(new Date().valueOf()) + convertDaysToMili(1)) {
+        break;
+      }
+      let countUserRetention = 0;
+      const usersEvents = events
+        .filter(
+          (event) =>
+            currentDateCheck + convertDaysToMili(7) > event.date &&
+            event.date >= currentDateCheck &&
+            event.name === "login"
+        )
+        .map((user) => user.distinct_user_id);
+
+      const setUsersArr = Array.from(new Set(usersEvents));
+      for (let user of setUsersArr) {
+        if (users.findIndex((userToCheck) => userToCheck === user) !== -1) {
+          countUserRetention++;
+        }
+      }
+
+      weeklyRetention.push(Math.round((countUserRetention * 100) / users.length));
+
+      currentDateCheck += convertDaysToMili(7);
+    }
+    return { ...weeklyRetentionObject, weeklyRetention };
+  };
+  const retentionsData = [];
+  let retentionsCounter = 0;
+  let numberStart = startingDateInNumber;
+  while (numberStart < new Date().valueOf()) {
+    retentionsCounter++;
+    if (getStringDates(numberStart)[0].slice(-5) === "10/25") {
+      numberStart += 3600 * 1000;
+    }
+    retentionsData.push(
+      getOneWeekRetentions(numberStart, getSingedUsers(numberStart), retentionsCounter)
+    );
+    numberStart += convertDaysToMili(7);
+  }
+  res.json(retentionsData);
 });
 
 router.get("/chart/os/:time", (req: Request, res: Response) => {
