@@ -18601,17 +18601,6 @@
       "balance": 75609,
       "createdAt": "2020-10-01T09:13:42.678Z",
       "modifiedAt": "2020-10-29T19:34:28.576Z"
-    },
-    {
-      "id": "q216RBTGR",
-      "uuid": "61a269c8-6268-4d04-9179-85a48c2f22a6",
-      "firstName": "Zach",
-      "lastName": "beja",
-      "username": "yrzizach",
-      "password": "$2a$10$r2wvJF8YCqq75Knvt5SFD.DooVHwpLemzEsPvx3QUV1bO7hyev1Ju",
-      "balance": 0,
-      "createdAt": "2020-11-02T14:06:54.115Z",
-      "modifiedAt": "2020-11-02T14:06:54.115Z"
     }
   ],
   "contacts": [
@@ -20366,17 +20355,6 @@
       "isDeleted": false,
       "createdAt": "2019-10-31T03:08:47.374Z",
       "modifiedAt": "2020-10-29T06:01:00.266Z"
-    },
-    {
-      "id": "82KGthYb-",
-      "uuid": "57c258c2-35c3-44d6-8895-3c0fc3b3f491",
-      "userId": "q216RBTGR",
-      "bankName": "123412341234",
-      "accountNumber": "124234242",
-      "routingNumber": "123424242",
-      "isDeleted": false,
-      "createdAt": "2020-11-02T14:07:17.280Z",
-      "modifiedAt": "2020-11-02T14:07:17.280Z"
     }
   ],
   "transactions": [

@@ -12,16 +12,13 @@ const GoogleMapsTile = () => {
   const [map, setMap] = useState<google.maps.Map | undefined>(undefined);
   const [events, setEvents] = useState<Event[] | undefined>(undefined);
   const [filter, setFilter] = useState<string>("signup");
-  const [loading, setLoading] = useState<boolean>(true);
 
   const getFilteredMap = useCallback(async () => {
     console.log("filtering", filter);
-    setLoading(true);
     const { data: filteredEvents } = await axios.get(
       `http://localhost:3001/events/all-filtered?type=${filter}`
     );
     setEvents(filteredEvents.events);
-    setLoading(false);
   }, [filter]);
 
   useEffect(() => {
@@ -42,23 +39,25 @@ const GoogleMapsTile = () => {
     lat: 31.46667,
     lng: 34.783333,
   };
-  const mapStyle = { height: "100%", width: "100%" };
+  const mapStyle = { height: `calc(100% - 50px)`, width: "100%" };
   return (
     <>
       <Resizable
+        minWidth="200px"
+        minHeight="200px"
         defaultSize={{
           width: "33vw",
           height: "33vh",
         }}
       >
-        <Loading loadingComponent={<LoadingCanvas />} loading={loading}>
+        <Loading loadingComponent={<LoadingCanvas />} loading={!events}>
           <Select onChange={(e) => setFilter(e.target.value)}>
             <option value={"signup"}>signup</option>
             <option value={"admin"}>admin</option>
             <option value={"login"}>login</option>
             <option value={"/"}>/</option>
           </Select>
-          <LoadScript googleMapsApiKey={apiKey}>
+          <LoadScript googleMapsApiKey={apiKey} loadingElement={LoadingCanvas}>
             <GoogleMap
               mapContainerStyle={mapStyle}
               zoom={1}
@@ -73,16 +72,21 @@ const GoogleMapsTile = () => {
                 scaleControl: true,
               }}
             >
-              {Array.isArray(events) &&
-                events.map((event) => {
-                  return (
-                    <Marker
-                      key={event._id}
-                      position={event.geolocation.location}
-                      // animation={window.google.maps.Animation.DROP}
-                    />
-                  );
-                })}
+              {Array.isArray(events) && (
+                // @ts-ignore
+                <MarkerClusterer>
+                  {(clusterer) =>
+                    events.map((event) => (
+                      <Marker
+                        key={event._id}
+                        position={event.geolocation.location}
+                        clusterer={clusterer}
+                        title={event.browser}
+                      />
+                    ))
+                  }
+                </MarkerClusterer>
+              )}
             </GoogleMap>
           </LoadScript>
         </Loading>
@@ -94,10 +98,10 @@ const GoogleMapsTile = () => {
 export default memo(GoogleMapsTile);
 
 const Select = styled.select`
-  background-color: #0563af;
+  background-color: #3f51b5;
   color: white;
   padding: 12px;
-  width: 250px;
+  height: 50px;
   border: none;
   font-size: 20px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
