@@ -199,6 +199,7 @@ const toStartOfTheDay = (date: number): number => {
 router.get("/retention", (req: Request, res: Response) => {
   const dayZero: number = +req.query.dayZero;
   const events: Event[] = getAllEvents();
+
   let startingDateInNumber: number = toStartOfTheDay(dayZero);
   const getStringDates = (startingDateInNumber: number): string[] => {
     return [
@@ -243,7 +244,6 @@ router.get("/retention", (req: Request, res: Response) => {
             event.name === "login"
         )
         .map((user: Event): string => user.distinct_user_id);
-
       const setUsersArr: string[] = Array.from(new Set(usersEvents));
       for (let user of setUsersArr) {
         if (users.findIndex((userToCheck) => userToCheck === user) !== -1) {
