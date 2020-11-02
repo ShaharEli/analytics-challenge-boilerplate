@@ -258,9 +258,6 @@ router.get("/retention", (req: Request, res: Response) => {
   let numberStart = startingDateInNumber;
   while (numberStart < new Date().valueOf()) {
     retentionsCounter++;
-    if (getStringDates(numberStart)[0].slice(-5) === "10/25") {
-      numberStart += 3600 * 1000;
-    }
     retentionsData.push(
       getOneWeekRetentions(numberStart, getSingedUsers(numberStart), retentionsCounter)
     );
