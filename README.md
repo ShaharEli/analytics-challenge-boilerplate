@@ -49,7 +49,7 @@ you can use whichever library you choose, but [this one](https://www.npmjs.com/p
 ![How Startups Can Do Better Cohort Analyses – Philosophical Hacker](https://www.philosophicalhacker.com/images/cohort-analysis.png)
  - Showing log of all events - search option and filter by event name using regex. 
  
- The `Events Log` should load only 10 events, and load more only when the client scrolls down the log. 
+ The `Events Log` should load only 10 events, and load more only when the client scrolls down the log, order by time. 
 ![](https://i.imgur.com/hFlqDbG.png)
  - Showing page views for on each page.
  - Showing pie charts with users by operating system usage.
