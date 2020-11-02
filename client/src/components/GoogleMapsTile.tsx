@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect, memo } from "react";
 import { Resizable } from "re-resizable";
-import { GoogleMap, LoadScript, Marker, InfoWindow, MarkerClusterer } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, MarkerClusterer } from "@react-google-maps/api";
 import axios from "axios";
 import styled from "styled-components";
 import { Event } from "../models/event";
 import { Loading } from "react-loading-wrapper";
 import LoadingCanvas from "./LoadingCanvas";
-
 const apiKey = "AIzaSyA1jO5KCUbo5ifKHb4LK5ilBN2Fp0NZb5Y";
 const GoogleMapsTile = () => {
   const [map, setMap] = useState<google.maps.Map | undefined>(undefined);
@@ -14,7 +13,6 @@ const GoogleMapsTile = () => {
   const [filter, setFilter] = useState<string>("signup");
 
   const getFilteredMap = useCallback(async () => {
-    console.log("filtering", filter);
     const { data: filteredEvents } = await axios.get(
       `http://localhost:3001/events/all-filtered?type=${filter}`
     );
@@ -73,10 +71,9 @@ const GoogleMapsTile = () => {
               }}
             >
               {Array.isArray(events) && (
-                // @ts-ignore
                 <MarkerClusterer>
                   {(clusterer) =>
-                    events.map((event) => (
+                    events.map((event: Event) => (
                       <Marker
                         key={event._id}
                         position={event.geolocation.location}

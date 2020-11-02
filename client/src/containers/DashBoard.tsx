@@ -1,5 +1,7 @@
 import ErrorBoundry from "components/ErrorBoundry";
 import GoogleMapsTile from "components/GoogleMapsTile";
+import SessionsByDay from "components/SessionsByDay";
+import SessionsByHours from "components/SessionsByHours";
 
 import React from "react";
 import { Interpreter } from "xstate";
@@ -14,6 +16,12 @@ const DashBoard: React.FC = () => {
     <>
       <ErrorBoundry>
         <GoogleMapsTile />
+      </ErrorBoundry>
+      <ErrorBoundry>
+        <SessionsByDay />
+      </ErrorBoundry>
+      <ErrorBoundry>
+        <SessionsByHours />
       </ErrorBoundry>
     </>
   );

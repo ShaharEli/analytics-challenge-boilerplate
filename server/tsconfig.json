@@ -1,13 +1,8 @@
 {
-  
   "compilerOptions": {
     "baseUrl": "server",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,7 +16,7 @@
     "jsx": "react",
     "isolatedModules": true
   },
-  "files":["backend/__tests__/events.test.ts"],
+  "files": ["backend/__tests__/events.test.ts"],
   "include": [
     // "src",
     // "scripts",

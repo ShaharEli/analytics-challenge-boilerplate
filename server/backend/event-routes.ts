@@ -8,12 +8,6 @@ import { getAllEvents, createEvent } from "./database";
 import { Event, weeklyRetentionObject } from "../../client/src/models/event";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 
-import {
-  shortIdValidation,
-  searchValidation,
-  userFieldsValidator,
-  isUserValidator,
-} from "./validators";
 import { count } from "console";
 const router = express.Router();
 
