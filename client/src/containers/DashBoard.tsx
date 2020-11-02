@@ -1,3 +1,6 @@
+import ErrorBoundry from "components/ErrorBoundry";
+import GoogleMapsTile from "components/GoogleMapsTile";
+
 import React from "react";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -9,6 +12,9 @@ export interface Props {
 const DashBoard: React.FC = () => {
   return (
     <>
+      <ErrorBoundry>
+        <GoogleMapsTile />
+      </ErrorBoundry>
     </>
   );
 };
