@@ -260,13 +260,21 @@ router.get("/retention", (req: Request, res: Response) => {
   const retentionsData = [];
   let retentionsCounter = 0;
   let numberStart = startingDateInNumber;
+
   while (numberStart < new Date().valueOf()) {
+    if (getStringDates(numberStart)[0].slice(-5) === "10/25") {
+      numberStart += 3600 * 1000;
+    }
     retentionsCounter++;
     retentionsData.push(
       getOneWeekRetentions(numberStart, getSingedUsers(numberStart), retentionsCounter)
     );
     numberStart += convertDaysToMili(7);
+    if (getStringDates(numberStart)[1].slice(-5) === "10/25") {
+      numberStart += 3600 * 1000;
+    }
   }
+
   res.json(retentionsData);
 });
 
