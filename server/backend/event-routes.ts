@@ -6,18 +6,9 @@ import { Request, Response } from "express";
 // some useful database functions in here:
 import { getAllEvents, createEvent } from "./database";
 import { Event, weeklyRetentionObject } from "../../client/src/models/event";
-import { ensureAuthenticated, validateMiddleware } from "./helpers";
 
-import { count } from "console";
 const router = express.Router();
 
-type eventName = "login" | "signup" | "admin" | "/";
-type os = "windows" | "mac" | "linux" | "ios" | "android" | "other";
-type browser = "chrome" | "safari" | "edge" | "firefox" | "ie" | "other";
-type GeoLocation = {
-  location: Location;
-  accuracy: number;
-};
 type Location = {
   lat: number;
   lng: number;
@@ -79,9 +70,19 @@ router.get("/all-filtered", (req: Request, res: Response) => {
         : secondEvent.date - firstEvent.date
     );
   }
+  const getMore = () => {
+    if (filters.offset) {
+      if (filters.offset < filtered.length) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  };
 
   res.json({
     events: filtered.slice(0, filters.offset || filtered.length),
+    more: getMore(),
   });
 });
 

@@ -1,5 +1,6 @@
 import ErrorBoundry from "components/ErrorBoundry";
 import GoogleMapsTile from "components/GoogleMapsTile";
+import RetentionTable from "components/RetentionTable";
 import SessionsByDay from "components/SessionsByDay";
 import SessionsByHours from "components/SessionsByHours";
 
@@ -13,7 +14,7 @@ export interface Props {
 
 const DashBoard: React.FC = () => {
   return (
-    <>
+    <div style={{ display: "flex", flexWrap: "wrap" }}>
       <ErrorBoundry>
         <GoogleMapsTile />
       </ErrorBoundry>
@@ -23,7 +24,10 @@ const DashBoard: React.FC = () => {
       <ErrorBoundry>
         <SessionsByHours />
       </ErrorBoundry>
-    </>
+      <ErrorBoundry>
+        <RetentionTable />
+      </ErrorBoundry>
+    </div>
   );
 };
 
