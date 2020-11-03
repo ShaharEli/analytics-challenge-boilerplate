@@ -95,14 +95,15 @@ interface FilteredBySession {
 
 type FilteredByDate = Omit<FilteredBySession, "date"> & { date: string };
 
+const toStartOfTheDay = (date: number): number => {
+  return new Date(new Date(date).toDateString()).valueOf();
+};
+
 router.get("/by-days/:offset", (req: Request, res: Response) => {
   const offset: number = +req.params.offset;
   const events: Event[] = getAllEvents();
   let startingDate: number = new Date().valueOf() - convertDaysToMili(offset - 1);
-  const day: number = new Date(startingDate).getDate();
-  const month: number = new Date(startingDate).getMonth() + 1;
-  const year: number = new Date(startingDate).getFullYear();
-  startingDate = new Date(`${year}/${month}/${day}`).valueOf();
+  startingDate = toStartOfTheDay(startingDate);
   const endDate = startingDate - convertDaysToMili(7);
   let filtered = events.filter((event) => event.date < startingDate && event.date >= endDate);
   filtered.sort((firstEvent: Event, secondEvent: Event) => firstEvent.date - secondEvent.date);
@@ -187,9 +188,6 @@ router.post("/", (req: Request, res: Response) => {
     res.send("event not added");
   }
 });
-const toStartOfTheDay = (date: number): number => {
-  return new Date(new Date(date).toDateString()).valueOf();
-};
 
 router.get("/retention", (req: Request, res: Response) => {
   const dayZero: number = +req.query.dayZero;
