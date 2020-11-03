@@ -15,6 +15,8 @@ import styled from "styled-components";
 import { TableBody } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
 
+const generateKey = (): string => uuidv4().split("-")[0];
+
 const calcUsersPrecentage = (
   data?: weeklyRetentionObject[]
 ): { allUsers: number; precentageArray: number[] } => {
@@ -91,7 +93,7 @@ export default function RetentionTable() {
                 <TableRow style={{ background: "#f1f1f1" }}>
                   <TableCell></TableCell>
                   {retention[0]?.weeklyRetention.map((percentages: number, i: number) => (
-                    <TableCell key={uuidv4()}>Week Number {i}</TableCell>
+                    <TableCell key={generateKey()}>Week Number {i}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -104,17 +106,17 @@ export default function RetentionTable() {
                     calcUsersPrecentage(
                       retention
                     ).precentageArray.map((percent: number, index: number) => (
-                      <TableCell key={uuidv4()}>{percent + "%"}</TableCell>
+                      <TableCell key={generateKey()}>{percent + "%"}</TableCell>
                     ))}
                 </TableRow>
                 {retention.map((weeklyRetentionData: weeklyRetentionObject) => (
-                  <TableRow key={uuidv4()}>
+                  <TableRow key={generateKey()}>
                     <TableCell>
                       {weeklyRetentionData.start} - {weeklyRetentionData.end}
                       <P>{weeklyRetentionData.newUsers} new users</P>
                     </TableCell>
                     {weeklyRetentionData.weeklyRetention.map((cell: number, index: number) => (
-                      <TableCell key={uuidv4()}>
+                      <TableCell key={generateKey()}>
                         {cell === null
                           ? "not available"
                           : weeklyRetentionData.newUsers === 0
