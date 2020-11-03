@@ -46,8 +46,7 @@ const SessionsByDay = () => {
     >
       <Loading loadingComponent={<LoadingCanvas />} loading={!events}>
         <TextField
-          id="datetime-local"
-          label="Main"
+          label="date"
           type="date"
           style={{ height: "50px", width: "100%" }}
           InputProps={{
