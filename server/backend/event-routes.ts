@@ -40,18 +40,12 @@ function convertDateToString(date: number) {
 
 router.get("/all-filtered", (req: Request, res: Response) => {
   const filters: Filter = req.query;
-  let filtered: any[] = getAllEvents();
+  let filtered: Event[] = getAllEvents();
 
   if (filters.search) {
     const reg: RegExp = new RegExp(filters.search, "i");
     filtered = filtered.filter((event) => {
-      let checker = false;
-      for (const key in event) {
-        if (reg.test(event[key])) {
-          checker = true;
-        }
-      }
-      return checker;
+      return Object.values(event).some((value) => reg.test(value.toString()));
     });
   }
 
