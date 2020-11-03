@@ -6,7 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { convertDateToString, getOffset, today } from "./dateHelpers";
+import { convertDateToString, today } from "./dateHelpers";
 import { Resizable } from "re-resizable";
 import { Loading } from "react-loading-wrapper";
 import LoadingCanvas from "./LoadingCanvas";
@@ -67,6 +67,7 @@ export default function RetentionTable() {
     <Resizable
       minWidth="200px"
       minHeight="200px"
+      style={{ margin: "30px" }}
       defaultSize={{
         width: "33vw",
         height: "33vh",
@@ -75,8 +76,7 @@ export default function RetentionTable() {
       {retention && (
         <Loading loading={retention.length === 0} loadingComponent={<LoadingCanvas />}>
           <TextField
-            id="datetime-local"
-            label="Main"
+            label="date"
             type="date"
             style={{ height: "50px", width: "100%" }}
             InputProps={{

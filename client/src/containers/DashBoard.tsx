@@ -1,4 +1,5 @@
 import ErrorBoundry from "components/ErrorBoundry";
+import EventLog from "components/EventLog";
 import GoogleMapsTile from "components/GoogleMapsTile";
 import RetentionTable from "components/RetentionTable";
 import SessionsByDay from "components/SessionsByDay";
@@ -26,6 +27,9 @@ const DashBoard: React.FC = () => {
       </ErrorBoundry>
       <ErrorBoundry>
         <RetentionTable />
+      </ErrorBoundry>
+      <ErrorBoundry>
+        <EventLog />
       </ErrorBoundry>
     </div>
   );

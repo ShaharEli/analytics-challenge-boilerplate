@@ -43,6 +43,7 @@ const GoogleMapsTile = () => {
       <Resizable
         minWidth="200px"
         minHeight="200px"
+        style={{ margin: "30px" }}
         defaultSize={{
           width: "33vw",
           height: "33vh",
