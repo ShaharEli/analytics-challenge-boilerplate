@@ -4,7 +4,7 @@ import GoogleMapsTile from "components/GoogleMapsTile";
 import RetentionTable from "components/RetentionTable";
 import SessionsByDay from "components/SessionsByDay";
 import SessionsByHours from "components/SessionsByHours";
-
+import styled from "styled-components";
 import React from "react";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
@@ -15,7 +15,7 @@ export interface Props {
 
 const DashBoard: React.FC = () => {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <DashBoardContainer>
       <ErrorBoundry>
         <GoogleMapsTile />
       </ErrorBoundry>
@@ -31,8 +31,12 @@ const DashBoard: React.FC = () => {
       <ErrorBoundry>
         <EventLog />
       </ErrorBoundry>
-    </div>
+    </DashBoardContainer>
   );
 };
 
 export default DashBoard;
+const DashBoardContainer = styled.div`
+  display: "flex";
+  flex-wrap: "wrap";
+`;
