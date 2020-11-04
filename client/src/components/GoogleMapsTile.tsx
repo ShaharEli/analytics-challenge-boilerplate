@@ -40,12 +40,13 @@ const GoogleMapsTile = () => {
   const mapStyle = { height: `calc(100% - 50px)`, width: "100%" };
   return (
     <>
+      <AnaliticTitle>events in map</AnaliticTitle>
       <Resizable
         minWidth="200px"
         minHeight="200px"
         style={{ margin: "30px" }}
         defaultSize={{
-          width: "33vw",
+          width: "90%",
           height: "33vh",
         }}
       >
@@ -107,4 +108,8 @@ const Select = styled.select`
   appearance: button;
   outline: none;
   width: 100%;
+`;
+
+const AnaliticTitle = styled.h2`
+  margin-left: 20px;
 `;

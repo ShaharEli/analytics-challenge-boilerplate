@@ -64,74 +64,77 @@ export default function RetentionTable() {
   }, [offset]);
 
   return (
-    <Resizable
-      minWidth="200px"
-      minHeight="200px"
-      style={{ margin: "30px" }}
-      defaultSize={{
-        width: "33vw",
-        height: "33vh",
-      }}
-    >
-      {retention && (
-        <Loading loading={retention.length === 0} loadingComponent={<LoadingCanvas />}>
-          <TextField
-            label="date"
-            type="date"
-            style={{ height: "50px", width: "100%" }}
-            InputProps={{
-              inputProps: { min: "2020-05-01", max: convertDateToString(today) },
-            }}
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TableContainer style={{ width: "100%", height: "calc(100% - 50px)" }}>
-            <Table size="small" style={{ border: "1px solid #DDDDDD" }}>
-              <TableHead>
-                <TableRow style={{ background: "#f1f1f1" }}>
-                  <TableCell></TableCell>
-                  {retention[0]?.weeklyRetention.map((percentages: number, i: number) => (
-                    <TableCell key={generateKey()}>Week Number {i}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    {retention.length > 0 && calcUsersPrecentage(retention).allUsers}
-                  </TableCell>
-                  {retention.length > 0 &&
-                    calcUsersPrecentage(
-                      retention
-                    ).precentageArray.map((percent: number, index: number) => (
-                      <TableCell key={generateKey()}>{percent + "%"}</TableCell>
-                    ))}
-                </TableRow>
-                {retention.map((weeklyRetentionData: weeklyRetentionObject) => (
-                  <TableRow key={generateKey()}>
-                    <TableCell>
-                      {weeklyRetentionData.start} - {weeklyRetentionData.end}
-                      <P>{weeklyRetentionData.newUsers} new users</P>
-                    </TableCell>
-                    {weeklyRetentionData.weeklyRetention.map((cell: number, index: number) => (
-                      <TableCell key={generateKey()}>
-                        {cell === null
-                          ? "not available"
-                          : weeklyRetentionData.newUsers === 0
-                          ? "no users singed up"
-                          : cell + "%"}
-                      </TableCell>
+    <>
+      <AnaliticTitle>users retention</AnaliticTitle>
+      <Resizable
+        minWidth="200px"
+        minHeight="200px"
+        style={{ margin: "30px" }}
+        defaultSize={{
+          width: "90%",
+          height: "33vh",
+        }}
+      >
+        {retention && (
+          <Loading loading={retention.length === 0} loadingComponent={<LoadingCanvas />}>
+            <TextField
+              label="date"
+              type="date"
+              style={{ height: "50px", width: "100%" }}
+              InputProps={{
+                inputProps: { min: "2020-05-01", max: convertDateToString(today) },
+              }}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TableContainer style={{ width: "100%", height: "calc(100% - 50px)" }}>
+              <Table size="small" style={{ border: "1px solid #DDDDDD" }}>
+                <TableHead>
+                  <TableRow style={{ background: "#f1f1f1" }}>
+                    <TableCell></TableCell>
+                    {retention[0]?.weeklyRetention.map((percentages: number, i: number) => (
+                      <TableCell key={generateKey()}>Week Number {i}</TableCell>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Loading>
-      )}
-    </Resizable>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      {retention.length > 0 && calcUsersPrecentage(retention).allUsers}
+                    </TableCell>
+                    {retention.length > 0 &&
+                      calcUsersPrecentage(
+                        retention
+                      ).precentageArray.map((percent: number, index: number) => (
+                        <TableCell key={generateKey()}>{percent + "%"}</TableCell>
+                      ))}
+                  </TableRow>
+                  {retention.map((weeklyRetentionData: weeklyRetentionObject) => (
+                    <TableRow key={generateKey()}>
+                      <TableCell>
+                        {weeklyRetentionData.start} - {weeklyRetentionData.end}
+                        <P>{weeklyRetentionData.newUsers} new users</P>
+                      </TableCell>
+                      {weeklyRetentionData.weeklyRetention.map((cell: number, index: number) => (
+                        <TableCell key={generateKey()}>
+                          {cell === null
+                            ? "not available"
+                            : weeklyRetentionData.newUsers === 0
+                            ? "no users singed up"
+                            : cell + "%"}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Loading>
+        )}
+      </Resizable>
+    </>
   );
 }
 
@@ -140,4 +143,8 @@ const P = styled.p`
   margin: 0;
   font-size: 10px;
   color: grey;
+`;
+
+const AnaliticTitle = styled.h2`
+  margin-left: 20px;
 `;

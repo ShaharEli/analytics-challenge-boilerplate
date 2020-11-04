@@ -39,4 +39,10 @@ export default DashBoard;
 const DashBoardContainer = styled.div`
   display: "flex";
   flex-wrap: "wrap";
+  left: 50%;
+  position: relative;
+  margin-left: -30vw;
+  right: 50%;
+  width: 60vw;
+  margin-bottom: 10vh;
 `;

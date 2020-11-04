@@ -39,42 +39,49 @@ const SessionsByHours = () => {
   };
 
   return (
-    <Resizable
-      minWidth="200px"
-      minHeight="200px"
-      style={{ margin: "30px" }}
-      defaultSize={{
-        width: "33vw",
-        height: "33vh",
-      }}
-    >
-      <Loading loadingComponent={<LoadingCanvas />} loading={!sessions}>
-        <TextField
-          label="date"
-          type="date"
-          style={{ height: "50px", width: "100%" }}
-          InputProps={{
-            inputProps: { min: "2020-05-01", max: convertDateToString(today) },
-          }}
-          onChange={handleChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <div style={{ height: "calc(100% - 50px)", width: "100%" }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={sessions} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-              <Line type="monotone" dataKey="count" stroke="#8884d8" name="This Day" />
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <XAxis dataKey="hour" />
-              <YAxis />
-              <Tooltip />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </Loading>
-    </Resizable>
+    <>
+      <AnaliticTitle>sessions by hours</AnaliticTitle>
+      <Resizable
+        minWidth="200px"
+        minHeight="200px"
+        style={{ margin: "30px" }}
+        defaultSize={{
+          width: "90%",
+          height: "33vh",
+        }}
+      >
+        <Loading loadingComponent={<LoadingCanvas />} loading={!sessions}>
+          <TextField
+            label="date"
+            type="date"
+            style={{ height: "50px", width: "100%" }}
+            InputProps={{
+              inputProps: { min: "2020-05-01", max: convertDateToString(today) },
+            }}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <div style={{ height: "calc(100% - 50px)", width: "100%" }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sessions} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                <Line type="monotone" dataKey="count" stroke="#8884d8" name="This Day" />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <XAxis dataKey="hour" />
+                <YAxis />
+                <Tooltip />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Loading>
+      </Resizable>
+    </>
   );
 };
 
 export default SessionsByHours;
+
+const AnaliticTitle = styled.h2`
+  margin-left: 20px;
+`;

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Resizable } from "re-resizable";
+import React, { useState, useEffect } from "react";
 import { Loading } from "react-loading-wrapper";
 import LoadingCanvas from "./LoadingCanvas";
 import styled from "styled-components";
@@ -105,124 +104,137 @@ export default function EventLog() {
   }, [sort, searchInput, type, browser]);
 
   return (
-    <div style={{ width: "66vw", height: "33vh" }}>
-      <Loading loadingComponent={<LoadingCanvas />} loading={!events}>
-        <Grid>
-          <div>
-            <TextField
-              label="Search"
-              value={searchInput}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-                setSearchInput(e.target.value)
-              }
-            />
-            <br />
-            <br />
-            <TextField
-              select
-              label="Type"
-              value={type}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-                setType(e.target.value)
-              }
-              variant="outlined"
-              helperText="Please select your event type"
+    <>
+      <AnaliticTitle>events log</AnaliticTitle>
+      <EventLogContainer>
+        <Loading loadingComponent={<LoadingCanvas />} loading={!events}>
+          <Grid>
+            <div>
+              <TextField
+                label="Search"
+                value={searchInput}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setSearchInput(e.target.value)
+                }
+              />
+              <br />
+              <br />
+              <TextField
+                select
+                label="Type"
+                value={type}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setType(e.target.value)
+                }
+                variant="outlined"
+                helperText="Please select your event type"
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="pageView">PageView</MenuItem>
+                <MenuItem value="login">Login</MenuItem>
+                <MenuItem value="signup">Sign Up</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
+              </TextField>
+              <br />
+              <br />
+              <TextField
+                select
+                label="Sort"
+                value={sort}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setSort(e.target.value)
+                }
+                variant="outlined"
+                helperText="Please select how you want to sort Your Events"
+              >
+                <MenuItem value="+date">Newest To Oldest</MenuItem>
+                <MenuItem value="-date">Oldest To Newest</MenuItem>
+              </TextField>
+              <br />
+              <br />
+              <TextField
+                select
+                label="Browser"
+                value={browser}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+                  setBrowser(e.target.value)
+                }
+                variant="outlined"
+                helperText="Please select your event browser"
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="ie">Internet Explorer</MenuItem>
+                <MenuItem value="chrome">Chrome</MenuItem>
+                <MenuItem value="safari">Safari</MenuItem>
+                <MenuItem value="firefox">Firefox</MenuItem>
+                <MenuItem value="edge">Edge</MenuItem>
+                <MenuItem value="other">Other</MenuItem>
+              </TextField>
+            </div>
+            <EventLogContainer
+              id="scrollableDiv"
+              style={{ width: "100%", height: "40vh", overflowY: "scroll" }}
             >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="pageView">PageView</MenuItem>
-              <MenuItem value="login">Login</MenuItem>
-              <MenuItem value="signup">Sign Up</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
-            </TextField>
-            <br />
-            <br />
-            <TextField
-              select
-              label="Sort"
-              value={sort}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-                setSort(e.target.value)
-              }
-              variant="outlined"
-              helperText="Please select how you want to sort Your Events"
-            >
-              <MenuItem value="+date">Newest To Oldest</MenuItem>
-              <MenuItem value="-date">Oldest To Newest</MenuItem>
-            </TextField>
-            <br />
-            <br />
-            <TextField
-              select
-              label="Browser"
-              value={browser}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
-                setBrowser(e.target.value)
-              }
-              variant="outlined"
-              helperText="Please select your event browser"
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="ie">Internet Explorer</MenuItem>
-              <MenuItem value="chrome">Chrome</MenuItem>
-              <MenuItem value="safari">Safari</MenuItem>
-              <MenuItem value="firefox">Firefox</MenuItem>
-              <MenuItem value="edge">Edge</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
-            </TextField>
-          </div>
-          <div id="scrollableDiv" style={{ width: "100%", height: "40vh", overflowY: "scroll" }}>
-            <InfiniteScroll
-              dataLength={eventsToShow ? eventsToShow.length : 0}
-              next={handleLoad}
-              scrollableTarget="scrollableDiv"
-              hasMore={events ? current < events.length : false}
-              loader={<h4>Loading...</h4>}
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>No more events to display!</b>
-                </p>
-              }
-            >
-              {eventsToShow &&
-                eventsToShow.map((event, index) => {
-                  return (
-                    <div className={classes.root}>
-                      <Accordion
-                        expanded={expanded === `panel${index}`}
-                        onChange={handleChange(`panel${index}`)}
-                      >
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                          <Typography className={classes.heading}></Typography>
-                          <Typography className={classes.secondaryHeading}>
-                            User {event.distinct_user_id}
-                          </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <Typography className={classes.details}>
-                            Event type: {event.name}
-                            <br />
-                            Date: {convertDateToString(event.date)}
-                            <br />
-                            Os: {event.os}
-                            <br />
-                            Browser: {event.browser}
-                            <br />
-                            {!event.geolocation
-                              ? "Address: Not Found"
-                              : `Address: ${event.geolocation}`}
-                          </Typography>
-                        </AccordionDetails>
-                      </Accordion>
-                    </div>
-                  );
-                })}
-            </InfiniteScroll>
-          </div>
-        </Grid>
-      </Loading>
-    </div>
+              <InfiniteScroll
+                dataLength={eventsToShow ? eventsToShow.length : 0}
+                next={handleLoad}
+                scrollableTarget="scrollableDiv"
+                hasMore={events ? current < events.length : false}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>No more events to display!</b>
+                  </p>
+                }
+              >
+                {eventsToShow &&
+                  eventsToShow.map((event, index) => {
+                    return (
+                      <div className={classes.root}>
+                        <Accordion
+                          style={{ backgroundColor: "#F6F8FA" }}
+                          expanded={expanded === `panel${index}`}
+                          onChange={handleChange(`panel${index}`)}
+                        >
+                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography className={classes.heading}></Typography>
+                            <Typography className={classes.secondaryHeading}>
+                              User {event.distinct_user_id}
+                            </Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Typography className={classes.details}>
+                              Event type: {event.name}
+                              <br />
+                              Date: {convertDateToString(event.date)}
+                              <br />
+                              Os: {event.os}
+                              <br />
+                              Browser: {event.browser}
+                              <br />
+                              {!event.geolocation
+                                ? "Address: Not Found"
+                                : `Address: ${event.geolocation}`}
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+                      </div>
+                    );
+                  })}
+              </InfiniteScroll>
+            </EventLogContainer>
+          </Grid>
+        </Loading>
+      </EventLogContainer>
+    </>
   );
 }
+
+const EventLogContainer = styled.div`
+  max-width: "80%";
+  min-width: 250;
+  height: "33vh";
+`;
 
 const Grid = styled.div`
   display: grid;
@@ -232,4 +244,8 @@ const Grid = styled.div`
   @media (max-width: 1100px) {
     grid-template-columns: 1fr;
   }
+`;
+
+const AnaliticTitle = styled.h2`
+  margin-left: 20px;
 `;
