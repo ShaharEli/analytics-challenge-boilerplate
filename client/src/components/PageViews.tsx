@@ -1,7 +1,5 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  LineChart,
-  Line,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -24,7 +22,7 @@ interface Pages {
 
 export const PageViews = () => {
   const [events, setEvents] = useState<Pages[] | undefined>(undefined);
-  const getFilteredMap = async () => {
+  const getFilteredViews = async () => {
     try {
       const { data } = await axios.get(`http://localhost:3001/events/all-filtered?type=pageView`);
       const pageViewEvents: Event[] = data.events;
@@ -52,7 +50,7 @@ export const PageViews = () => {
     } catch (e) {}
   };
   useEffect(() => {
-    getFilteredMap();
+    getFilteredViews();
   }, []);
   return (
     <>
@@ -68,14 +66,16 @@ export const PageViews = () => {
         }}
       >
         <Loading loadingComponent={<LoadingCanvas />} loading={!events}>
-          <BarChart width={730} height={250} data={events}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="url" />
-            <YAxis dataKey="count" />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="count" barSize={40} fill="#4a5f8d" />
-          </BarChart>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={events}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="url" />
+              <YAxis dataKey="count" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" barSize={40} fill="#4a5f8d" />
+            </BarChart>
+          </ResponsiveContainer>
         </Loading>
       </Resizable>
     </>

@@ -9,6 +9,7 @@ import React from "react";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { PageViews } from "components/PageViews";
+import { OsChart } from "components/OsChart";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -34,6 +35,9 @@ const DashBoard: React.FC = () => {
       </ErrorBoundry>
       <ErrorBoundry>
         <PageViews />
+      </ErrorBoundry>
+      <ErrorBoundry>
+        <OsChart />
       </ErrorBoundry>
     </DashBoardContainer>
   );
