@@ -11,6 +11,15 @@ interface Os {
   os: string;
   count: number;
 }
+interface LabelProps {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  count: number;
+  index: number;
+}
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "blue", "green"];
 const RADIAN = Math.PI / 180;
 export const OsChart = () => {
@@ -46,7 +55,15 @@ export const OsChart = () => {
   useEffect(() => {
     getFilteredOs();
   }, []);
-  let renderLabel = function ({ cx, cy, midAngle, innerRadius, outerRadius, count, index }: any) {
+  let renderLabel = function ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    count,
+    index,
+  }: LabelProps) {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN) * 1.6;
@@ -62,7 +79,6 @@ export const OsChart = () => {
         {`${count}%`}
       </text>
     );
-    return;
   };
   return (
     <>
