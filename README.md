@@ -1,8 +1,12 @@
 # Analytics Challenge
 
 ## Introduction
+This is my fullstack analytics system that presents usage analytics about a website by collecting events sent to the platform (similar to Mixpanel.com), built on top of the "Cypress Real World App".
+It uses Node.Js with express and lowDB in the backend, and React with "recharts" and "react-google-maps" in the frontend.
 
-You will build analytics system that would present usage analytics about a website by collecting events sent to the platform (similar to Mixpanel.com).
+The frontend displays a dashboard containing cards of charts showing different analytics.
+After installing and running the app, register and login to the system, go to the side menu and click 'Analytics' to view the dashboard.
+
 
 ## Getting Started
 
